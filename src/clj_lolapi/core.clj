@@ -7,6 +7,10 @@
 
 (def observer-platform-ids #{"NA1" "BR1" "LA1" "LA2" "OC1" "EUN1" "TR1" "RU" "EUW1" "KR"})
 
+(def queue-types {:ranked-solo-5x5 "RANKED_SOLO_5x5"
+                  :ranked-team-5x5 "RANKED_TEAM_5x5"
+                  :ranked-team-3x3 "RANKED_TEAM_3x3"})
+
 ;;
 (defn if-region-valid
   [region-set region sexp]
@@ -41,7 +45,21 @@
   (key = team ID)."
   [region summoner-id]
   (if-region-valid regions region
-    (query/live region ["league" "by-summoner" summoner-id])))
+                   (query/live region ["league" "by-summoner" summoner-id])))
+
+(defn challenger-league
+  "Retrieve league data from challenger tier for target queue type"
+  [region type]
+  (if-let [str-type (get queue-types type)]
+    (query/live region ["league" "challenger"] {"type" str-type})
+    (throw (Exception. (str "Invalid queue type: " type ". Valid queues are: " (keys queue-types))))))
+
+(defn master-league
+  "Retrieve league data from master tier for target queue type"
+  [region type]
+  (if-let [str-type (get queue-types type)]
+    (query/live region ["league" "master"] {"type" str-type})
+    (throw (Exception. (str "Invalid queue type: " type ". Valid queues are: " (keys queue-types))))))
 
 (defn stats
   "Retrieves player stats summaries by summoner ID.
