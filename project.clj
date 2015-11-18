@@ -4,5 +4,7 @@
   :license {:name "LGPL v3"
             :url "http://www.gnu.org/licenses/lgpl.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [clj-http "0.7.9"]
-                 [environ "0.4.0"]])
+                 [clj-http "2.0.0"]
+                 ;; http://stackoverflow.com/questions/32131712/clj-http-get-url-as-json-doesnt-work-in-script-but-in-repl
+                 [cheshire "5.5.0"]
+                 [environ "1.0.1"]])
